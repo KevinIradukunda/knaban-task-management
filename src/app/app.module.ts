@@ -1,5 +1,8 @@
-import { NgModule } from '@angular/core';
-import { BrowserModule, provideClientHydration } from '@angular/platform-browser';
+import { NgModule, isDevMode } from '@angular/core';
+import {
+  BrowserModule,
+  provideClientHydration,
+} from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -11,24 +14,38 @@ import { sidebarReducer } from './store/sidebar/sidebar.reducer';
 import { EffectsModule } from '@ngrx/effects';
 import { themeReducer } from './store/theme/theme.reducer';
 import { CommonModule } from '@angular/common';
+import { BoardsComponent } from './components/boards/boards.component';
+import { ColumnComponent } from './components/column/column.component';
+import { CreateTaskComponent } from './components/create-task/create-task.component';
+import { BoardEffects } from './store/boards/board.effect';
+import { boardReducer } from './store/boards/board.reducer';
+import { HttpClientModule } from '@angular/common/http';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 
 @NgModule({
   declarations: [
     AppComponent,
     SidebarComponent,
     NavbarComponent,
-    EmptyboardComponent
+    EmptyboardComponent,
+    BoardsComponent,
+    ColumnComponent,
+    CreateTaskComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     CommonModule,
-    StoreModule.forRoot({sidebar: sidebarReducer, theme: themeReducer}),
-    EffectsModule.forRoot([]),
+    HttpClientModule,
+    StoreModule.forRoot({
+      sidebar: sidebarReducer,
+      theme: themeReducer,
+      boards: boardReducer,
+    }),
+    EffectsModule.forRoot([BoardEffects]),
+    StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() }),
   ],
-  providers: [
-    provideClientHydration()
-  ],
-  bootstrap: [AppComponent]
+  providers: [provideClientHydration()],
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

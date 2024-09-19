@@ -1,0 +1,14 @@
+<div
+  *ngIf="boards$ | async as boards"
+  class="flex flex-col items-center mt-8 space-y-6"
+>
+  <div class="w-full max-w-6xl overflow-auto h-[80vh]">
+    <!-- <h2 class="text-2xl font-semibold mb-6">{{ boards[0]?.name }}</h2> -->
+    <div class="flex space-x-4 overflow-x-auto h-full">
+      <app-column
+        *ngFor="let column of boards[0]?.columns"
+        [column]="column"
+      ></app-column>
+    </div>
+  </div>
+</div>
