@@ -13,6 +13,7 @@ module.exports = {
         MainHover: "#A8A4FF",
         paleblue: "#F4F7FD",
         bluesky: "#49C4E5",
+        skyred: "#EFEFF9",
       },
     },
   },
