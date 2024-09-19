@@ -12,6 +12,7 @@ module.exports = {
       colors: {
         MediumGray: '#828FA3', 
         MainPurple: '#635FC7',
+        MainHover: '#A8A4FF',
       },
     },
   },
