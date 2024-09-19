@@ -1,14 +1,23 @@
-
-<main class="flex relative"> 
-<aside class="fixed top-0 left-0">
-  <app-sidebar />
-</aside>
-<aside class="w-full h-[70vh] ml-[250px]">
-  <app-navbar />
-  <app-emptyboard />
+<main class="w-screen flex relative max-h-screen overflow-hidden">
+  <aside
+    [ngClass]="
+      (isVisible$ | async)
+        ? 'hidden md:block md:w-[35%] lg:w-[30%] xl:w-[20%]'
+        : 'w-[0px]'
+    "
+    class="duration-100"
+  >
+    <app-sidebar />
   </aside>
-
-
+  <div
+    [ngClass]="
+      (isVisible$ | async)
+        ? 'w-full md:w-[65%] lg:w-[70%] xl:w-[80%]'
+        : 'w-screen'
+    "
+    class="min-h-[92vh] duration-100"
+  >
+    <app-navbar />
+    <app-emptyboard />
+  </div>
 </main>
-
-

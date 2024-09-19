@@ -1,59 +1,124 @@
-<div>
-<div *ngIf="(isVisible$ | async)" class="w-[250px] h-screen flex flex-col justify-between sm:">
+<div class="w-full">
+  <div
+    *ngIf="isVisible$ | async"
+    class="w-full h-screen flex flex-col justify-between"
+  >
     <div>
-    <div class="flex flex-row text-center justify-center gap-3 mr-[40px] p-[20px] items-center">
+      <div
+        class="flex flex-row text-center justify-center gap-3 p-[20px] items-center"
+      >
         <div>
-            <img src="assets/knabanlogo.png" class="w-[24px] h-[25px]">
+          <img src="assets/knabanlogo.png" class="w-[24px] h-[25px]" />
         </div>
         <div class="font-bold text-[28px]">kanban</div>
-    </div>
-    <div  class="flex flex-col cursor-pointer">
-  <p class="font-jakarta text-[12px] font-bold text-center pr-[75px] text-MediumGray py-[20px]">ALL BOARDS (3)</p>
-        <div class="flex flex-row items-center bg-MainPurple active:bg-MainPurple text-white justify-center pr-[40px] gap-[13px] py-[10px] rounded-r-[20px]"><span><img src="assets/icon-board.svg"/></span><p class=" text-white text-[13px]">Platform Launch</p></div>
-        <div class=" hover:bg-MainPurple flex flex-row items-center justify-center pr-[48px] gap-[13px] py-[10px] rounded-r-[20px]"><span><img src="assets/icon-board.svg"/></span><p class=" text-MediumGray text-[13px] hover:text-white ">Marketing Plan</p></div>
-        <div class=" hover:bg-MainPurple flex flex-row items-center justify-center pr-[80px] gap-[13px] py-[10px] rounded-r-[20px]"><span><img src="assets/icon-board.svg"/></span><p class=" text-MediumGray text-[13px] hover:text-white ">Roadmap</p></div>
-        <div class=" hover:bg-MainPurple flex flex-row items-center justify-center pr-[15px] gap-[13px] py-[10px] rounded-r-[20px]"><span><img src="assets/boardpurple.png" class="hover:text-white "/></span><p class=" text-MediumGray text-[13px] text-MainPurple hover:text-white ">+ Create New Board</p></div>
-    </div>
+      </div>
+      <div class="flex flex-col cursor-pointer">
+        <p
+          class="font-jakarta text-[12px] font-bold text-center pr-[75px] text-MediumGray py-[20px]"
+        >
+          ALL BOARDS (3)
+        </p>
+        <div
+          class="flex flex-row items-center00 bg-MainPurple active:bg-MainPurple text-white justify-center pr-[40px] gap-[13px] py-[10px] rounded-r-[20px]"
+        >
+          <span><img src="assets/icon-board.svg" /></span>
+          <p class="text-white text-[13px]">Platform Launch</p>
+        </div>
+        <div
+          class="hover:bg-MainPurple flex flex-row items-center justify-center pr-[48px] gap-[13px] py-[10px] rounded-r-[20px]"
+        >
+          <span><img src="assets/icon-board.svg" /></span>
+          <p class="text-MediumGray text-[13px] hover:text-white">
+            Marketing Plan
+          </p>
+        </div>
+        <div
+          class="hover:bg-MainPurple flex flex-row items-center justify-center pr-[80px] gap-[13px] py-[10px] rounded-r-[20px]"
+        >
+          <span><img src="assets/icon-board.svg" /></span>
+          <p class="text-MediumGray text-[13px] hover:text-white">Roadmap</p>
+        </div>
+        <div
+          class="hover:bg-MainPurple flex flex-row items-center justify-center pr-[15px] gap-[13px] py-[10px] rounded-r-[20px]"
+        >
+          <span
+            ><img src="assets/boardpurple.png" class="hover:text-white"
+          /></span>
+          <p
+            class="text-MediumGray text-[13px] text-MainPurple hover:text-white"
+          >
+            + Create New Board
+          </p>
+        </div>
+      </div>
     </div>
 
     <div class="py-[30px]">
-    <div class=" flex flex-row items-center justify-center pr-[40px] gap-[14px] py-[10px]">
-        <div class=""><span><img src="assets/icon-light-theme.svg" /></span></div>
+      <div
+        class="flex bg-paleblue mx-4 flex-row items-center justify-center pr-[40px] gap-[14px] py-[16px] rounded-lg"
+      >
+        <div class="">
+          <span><img src="assets/icon-light-theme.svg" /></span>
+        </div>
 
         <div class="flex items-center w-[40px] h-[20px]">
-            <input type="checkbox" id="toggle" class="hidden peer" />
-            <label for="toggle" class="cursor-pointer">
-              <div class="w-14 h-8 bg-gray-300 peer-checked:bg-blue-500 rounded-full p-1 flex items-center transition-colors duration-300">
-                <div class="toggle-dot w-6 h-6 bg-white rounded-full shadow-md transform transition-transform duration-300 ease-in-out translate-x-0 peer-checked:translate-x-6">
-                  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-600 peer-checked:text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                  </svg>
-                </div>
+          <input type="checkbox" id="toggle" class="hidden peer" />
+          <label for="toggle" class="cursor-pointer">
+            <div
+              class="w-14 h-8 bg-gray-300 peer-checked:bg-blue-500 rounded-full p-1 flex items-center transition-colors duration-300"
+            >
+              <div
+                class="toggle-dot w-6 h-6 bg-white rounded-full shadow-md transform transition-transform duration-300 ease-in-out translate-x-0 peer-checked:translate-x-6"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-6 w-6 text-gray-600 peer-checked:text-blue-500"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M5 13l4 4L19 7"
+                  />
+                </svg>
               </div>
-            </label>
-          </div>
-          
-          
+            </div>
+          </label>
+        </div>
 
-          
-        <div class="ml-[17px]"><span><img src="assets/icon-dark-theme.svg" /></span></div>
-    </div>    
-    <div (click)="hideSidebar()" class=" flex flex-row items-center pl-[15px] pr-[59px] gap-[14px] mt-[0px] py-[10px] cursor-pointer">
-        <div><span><img src="assets/icon-hide-sidebar.svg" /></span></div>
+        <div class="ml-4">
+          <span><img src="assets/icon-dark-theme.svg" /></span>
+        </div>
+      </div>
+      <div
+        (click)="hideSidebar()"
+        class="flex flex-row items-center pl-[15px] pr-[59px] gap-[14px] mt-[0px] py-[10px] cursor-pointer"
+      >
+        <div>
+          <span><img src="assets/icon-hide-sidebar.svg" /></span>
+        </div>
         <p class="text-MediumGray text-[12px]">Hide Sidebar</p>
+      </div>
     </div>
-    </div>
-    
-    
-</div>
-<div class="flex flex-col justify-between ">
-<div class="flex flex-row text-center justify-center gap-3 ml-[80px] p-[20px] items-center">
-  <div>
-      <img src="assets/knabanlogo.png" class="w-[24px] h-[25px]">
   </div>
-  <div class="font-bold text-[28px]">kanban</div>
-</div>
+  <div class="flex flex-col justify-between">
+    <div
+      class="flex flex-row text-center justify-center gap-3 ml-[300px] p-[20px] items-center"
+    >
+      <div>
+        <img src="assets/knabanlogo.png" class="w-[24px] h-[25px]" />
+      </div>
+    </div>
 
-<button (click)="showSidebar()" class=" w-[56px] h-[48px] bg-MainPurple hover:bg-MainHover rounded-r-[30px] mt-[590px]"><img src="assets/icon-show-sidebar.svg" class="pl-[20px]" /></button>
-</div>
+    <button
+      (click)="showSidebar()"
+      [ngClass]="(isVisible$ | async) ? 'hidden' : 'block'"
+      class="w-[56px] h-[48px] bg-MainPurple hover:bg-MainHover rounded-r-[30px] fixed bottom-0 mb-8"
+    >
+      <img src="assets/icon-show-sidebar.svg" class="pl-[20px]" />
+    </button>
+  </div>
 </div>

@@ -13,6 +13,7 @@ module.exports = {
         MediumGray: '#828FA3', 
         MainPurple: '#635FC7',
         MainHover: '#A8A4FF',
+        paleblue: '#F4F7FD'
       },
     },
   },

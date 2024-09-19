@@ -4,28 +4,35 @@ import { Observable } from 'rxjs';
 import { themestate } from './model/theme.model';
 import { isDarkModeEnabled } from './store/theme/theme.selector';
 import { enableDarkMode, enableLightMode } from './store/theme/theme.action';
+import { isSidebarVisible } from './store/sidebar/sidebar.selector';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
+  styleUrl: './app.component.css',
 })
 export class AppComponent {
   title = 'knaban-taskmanagement';
+
+  isVisible$: Observable<boolean>;
+
+  constructor(private store: Store) {
+    this.isVisible$ = this.store.select(isSidebarVisible);
+  }
+
   // isDarkMode$: Observable<boolean>;
 
   // constructor(private store: Store<themestate>) {
-  //   this.isDarkMode$ = this.store.select(isDarkModeEnabled); 
+  //   this.isDarkMode$ = this.store.select(isDarkModeEnabled);
   // }
-
 
   // toggleTheme(isDarkMode: boolean) {
   //   let target = event.target as HTMLInputElement;
   //   const isChecked = target?.checked;
   //   if (isDarkMode) {
-  //     this.store.dispatch(enableDarkMode());  
+  //     this.store.dispatch(enableDarkMode());
   //   } else {
-  //     this.store.dispatch(enableLightMode());  
+  //     this.store.dispatch(enableLightMode());
   //   }
   // }
 }
