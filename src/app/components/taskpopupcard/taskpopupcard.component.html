@@ -52,7 +52,7 @@
 
       <h3 class="font-semibold text-MediumGray mb-2">Current Status</h3>
       <select
-        [(ngModel)]="selectedTask.status"
+        [(ngModel)]="selectedTask.status" (change)="onStatusChange(selectedTask.status)"
         class="w-full p-2 border-bordercolors rounded-lg text-gray-700 border-[3px]"
       >
         <option value="Todo">Todo</option>

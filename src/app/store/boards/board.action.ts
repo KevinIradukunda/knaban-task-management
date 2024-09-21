@@ -9,3 +9,8 @@ export const loadBoardsFailure = createAction(
   '[Board] Load Boards Failure',
   props<{ error: string }>()
 );
+
+export const moveTaskToColumn = createAction(
+  '[Board] Move Task to Column',
+  props<{ task: any }>()
+);

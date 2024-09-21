@@ -7,6 +7,7 @@ import {
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { FormsModule } from '@angular/forms';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { EmptyboardComponent } from './components/emptyboard/emptyboard.component';
@@ -46,6 +47,7 @@ import { taskPopupReducer } from './store/taskpopup/taskpopup.reducer';
     CommonModule,
     HttpClientModule,
     FormsModule,
+    DragDropModule,
     StoreModule.forRoot({
       sidebar: sidebarReducer,
       theme: themeReducer,

@@ -3,11 +3,24 @@ import {
   loadBoards,
   loadBoardsFailure,
   loadBoardsSuccess,
+  moveTaskToColumn,
 } from './board.action';
-import { BoardState } from '../../model/boardstate.model';
+import { Board, BoardState, Column, Task } from '../../model/boardstate.model';
 
 export const initialState: BoardState = {
-  boards: [],
+  boards: [
+    {
+      name: 'Main Board',
+      columns: [
+        {
+          name: 'Todo',
+          tasks: [{ id: '1', title: 'Task 1', status: 'Todo', subtasks: [] }],
+        },
+        { name: 'Doing', tasks: [] },
+        { name: 'Done', tasks: [] },
+      ],
+    },
+  ],
   loading: false,
   error: null,
 };
@@ -24,5 +37,23 @@ export const boardReducer = createReducer(
     ...state,
     loading: false,
     error,
-  }))
+  })),
+  on(moveTaskToColumn, (state, { task }) => {
+    return {
+      ...state,
+      boards: state.boards.map((board: Board) => {
+        const updatedColumns = board.columns.map((column: Column) => {
+          const updatedTasks = column.tasks.filter((t) => t.id !== task.id);
+
+          if (column.name === task.status) {
+            updatedTasks.push(task);
+          }
+
+          return { ...column, tasks: updatedTasks };
+        });
+
+        return { ...board, columns: updatedColumns };
+      }),
+    };
+  })
 );

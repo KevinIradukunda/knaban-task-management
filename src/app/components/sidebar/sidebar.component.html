@@ -19,12 +19,26 @@
           ALL BOARDS (3)
         </p>
         <div
-          class="flex flex-row items-center00 bg-MainPurple active:bg-MainPurple text-white justify-center pr-[40px] gap-[13px] py-[10px] rounded-r-[20px]"
+          (click)="selectBoard('Platform Launch')"
+          [ngClass]="{
+            'bg-MainPurple text-white': selectedBoard === 'Platform Launch',
+            'hover:bg-MainPurple hover:text-white':
+              selectedBoard !== 'Platform Launch'
+          }"
+          class="flex flex-row items-center00 hover:bg-MainPurple text-white justify-center pr-[40px] gap-[13px] py-[10px] rounded-r-[20px]"
         >
           <span><img src="assets/icon-board.svg" /></span>
-          <p class="text-white text-[13px]">Platform Launch</p>
+          <p class="text-MediumGray hover:text-white text-[13px]">
+            Platform Launch
+          </p>
         </div>
         <div
+          (click)="selectBoard('Marketing Plan')"
+          [ngClass]="{
+            'bg-MainPurple text-white': selectedBoard === 'Marketing Plan',
+            'hover:bg-MainPurple hover:text-white':
+              selectedBoard !== 'Marketing Plan'
+          }"
           class="hover:bg-MainPurple flex flex-row items-center justify-center pr-[48px] gap-[13px] py-[10px] rounded-r-[20px]"
         >
           <span><img src="assets/icon-board.svg" /></span>
@@ -33,6 +47,11 @@
           </p>
         </div>
         <div
+          (click)="selectBoard('Roadmap')"
+          [ngClass]="{
+            'bg-MainPurple text-white': selectedBoard === 'Roadmap',
+            'hover:bg-MainPurple hover:text-white': selectedBoard !== 'Roadmap'
+          }"
           class="hover:bg-MainPurple flex flex-row items-center justify-center pr-[80px] gap-[13px] py-[10px] rounded-r-[20px]"
         >
           <span><img src="assets/icon-board.svg" /></span>

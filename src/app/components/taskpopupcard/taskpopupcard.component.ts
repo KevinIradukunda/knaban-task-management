@@ -6,6 +6,8 @@ import {
   selectIsPopupOpen,
   selectSelectedTask,
 } from '../../store/taskpopup/taskpopup.selector';
+import { moveTaskToColumn } from '../../store/boards/board.action';
+import { TaskpopupService } from '../../services/taskpopup/taskpopup.service';
 
 @Component({
   selector: 'app-taskpopupcard',
@@ -16,7 +18,10 @@ export class TaskpopupcardComponent {
   @Input() selectedTask: any;
   @Input() isPopupOpen$!: Observable<boolean>;
 
-  constructor(private store: Store) {}
+  constructor(
+    private store: Store,
+    private taskpopupService: TaskpopupService
+  ) {}
   ngOnInit(): void {
     this.store.select(selectSelectedTask).subscribe((task) => {
       this.selectedTask = task;
@@ -31,5 +36,10 @@ export class TaskpopupcardComponent {
   }
   onSubtaskChange(subtask: any) {
     console.log('Subtask changed:', subtask);
+  }
+  onStatusChange(newStatus: string) {
+    const updatedTask = { ...this.selectedTask, status: newStatus };
+    this.store.dispatch(moveTaskToColumn({ task: updatedTask }));
+    this.taskpopupService.closeTaskModal();
   }
 }
