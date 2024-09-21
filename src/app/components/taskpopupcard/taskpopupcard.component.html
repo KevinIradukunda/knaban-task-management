@@ -1,0 +1,64 @@
+<div
+  *ngIf="isPopupOpen$ | async"
+  class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+>
+  <div class="bg-white w-full max-w-lg p-6 rounded-lg shadow-lg relative">
+    <div class="flex justify-between items-center mb-4">
+      <h2 class="text-xl font-semibold text-gray-900">
+        {{ selectedTask?.title }}
+      </h2>
+      <button
+        (click)="closeModal()"
+        class="text-gray-500 hover:text-gray-700 transition"
+      >
+        &times;
+      </button>
+    </div>
+
+    <div>
+      <p class="text-MediumGray mb-4">
+        {{ selectedTask?.description || "No description available" }}
+      </p>
+
+      <h3 class="font-semibold mb-2">
+        <span class="text-MediumGray">Subtasks</span>
+        <span class="text-MediumGray"
+          >({{ countCompletedSubtasks(selectedTask?.subtasks) }}</span
+        >
+        <span class="text-MediumGray">of</span>
+        <span class="text-MediumGray"
+          >{{ selectedTask?.subtasks.length }})</span
+        >
+      </h3>
+      <ul class="mb-4">
+        <li
+          *ngFor="let subtask of selectedTask?.subtasks"
+          class="flex bg-lightgrey hover:bg-skyred py-[20px] px-4 rounded-md items-center mb-2"
+        >
+          <input
+            type="checkbox"
+            [(ngModel)]="subtask.isCompleted"
+            (change)="onSubtaskChange(subtask)"
+            [ngClass]="{ 'bg-mainpurple': subtask.isCompleted }"
+            class="mr-4 w-4 bg-MainPurple h-4 rounded-full cursor-pointer"
+          />
+          <span
+            [ngClass]="{ ' text-MediumGray': subtask.isCompleted }"
+            class="text-MediumGray"
+            >{{ subtask.title }}</span
+          >
+        </li>
+      </ul>
+
+      <h3 class="font-semibold text-MediumGray mb-2">Current Status</h3>
+      <select
+        [(ngModel)]="selectedTask.status"
+        class="w-full p-2 border-bordercolors rounded-lg text-gray-700 border-[3px]"
+      >
+        <option value="Todo">Todo</option>
+        <option value="Doing">Doing</option>
+        <option value="Done">Done</option>
+      </select>
+    </div>
+  </div>
+</div>

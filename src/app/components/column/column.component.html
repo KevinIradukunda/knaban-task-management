@@ -11,11 +11,12 @@
     {{ column.name }} ({{ column.tasks.length }})
   </h3>
 </div>
-<div class="column w-[300px] rounded-lg shadow-md">
-  <div class="space-y-6">
+<div class="column w-[300px] bg-skyred rounded-lg shadow-md">
+  <div class="space-y-4">
     <div
       *ngFor="let task of column.tasks"
-      class="task-card bg-white p-4 rounded-lg shadow-sm"
+      class="task-card bg-white hover:text-MainPurple p-4 rounded-lg shadow-sm cursor-pointer"
+      (click)="openTask(task)"
     >
       <h4 class="font-medium text-base">{{ task.title }}</h4>
       <p class="text-sm text-MediumGray">

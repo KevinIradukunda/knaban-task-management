@@ -7,6 +7,15 @@ import {
 } from '../../store/boards/board.selector';
 import { BoardService } from '../../services/boards/board.service';
 import { BoardState } from '../../model/boardstate.model';
+import { TaskpopupService } from '../../services/taskpopup/taskpopup.service';
+import {
+  selectIsPopupOpen,
+  selectSelectedTask,
+} from '../../store/taskpopup/taskpopup.selector';
+import {
+  closeTaskPopup,
+  openTaskPopup,
+} from '../../store/taskpopup/taskpopup.action';
 
 @Component({
   selector: 'app-boards',
@@ -17,6 +26,8 @@ export class BoardsComponent {
   boards$: Observable<any[]>;
   loading$: Observable<boolean>;
   error$: Observable<string | null>;
+  isTaskpopupOpen$: Observable<boolean>;
+  selectedTask$: Observable<any>;
 
   constructor(
     private store: Store<BoardState>,
@@ -25,10 +36,21 @@ export class BoardsComponent {
     this.boards$ = this.store.select(selectAllBoards);
     this.loading$ = this.store.select(selectLoading);
     this.error$ = this.store.select(selectError);
+
+    this.isTaskpopupOpen$ = this.store.select(selectIsPopupOpen);
+    this.selectedTask$ = this.store.select(selectSelectedTask);
   }
 
   ngOnInit(): void {
     this.boardService.fetchBoards();
+  }
+
+  openTask(task: any) {
+    this.store.dispatch(openTaskPopup({ task }));
+  }
+
+  closeModal() {
+    this.store.dispatch(closeTaskPopup());
   }
 
   addNewColumn() {
@@ -38,7 +60,6 @@ export class BoardsComponent {
           name: 'New Column',
           tasks: [],
         };
-
         boards[0].columns.push(newColumn);
       }
     });

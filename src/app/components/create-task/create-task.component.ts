@@ -1,4 +1,6 @@
 import { Component, Input } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { openTaskPopup } from '../../store/taskpopup/taskpopup.action';
 
 @Component({
   selector: 'app-create-task',
@@ -7,4 +9,9 @@ import { Component, Input } from '@angular/core';
 })
 export class CreateTaskComponent {
   @Input() task: any;
+  constructor(private store: Store) {}
+
+  openTaskModal() {
+    this.store.dispatch(openTaskPopup({ task: this.task }));
+  }
 }

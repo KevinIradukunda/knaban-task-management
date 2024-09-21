@@ -14,6 +14,8 @@ module.exports = {
         paleblue: "#F4F7FD",
         bluesky: "#49C4E5",
         skyred: "#EFEFF9",
+        bordercolors: "F3F3F3",
+        lightgrey: "F4F7FD",
       },
     },
   },
