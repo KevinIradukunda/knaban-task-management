@@ -1,60 +1,45 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { BoardState } from '../../model/boardstate.model';
+import { Board, Column, Task } from '../../model/boardstate.model';
 import {
   loadBoards,
   loadBoardsFailure,
   loadBoardsSuccess,
 } from '../../store/boards/board.action';
-import { catchError, map, of } from 'rxjs';
+import { Observable, catchError, map, of } from 'rxjs';
+import { v4 as uuidv4 } from 'uuid';
 
 @Injectable({
   providedIn: 'root',
 })
 export class BoardService {
-  private url = '/assets/data.json';
+  private dataUrl = 'assets/data.json';
 
-  constructor(private http: HttpClient, private store: Store) {}
+  constructor(private http: HttpClient) {}
 
-  fetchBoards() {
-    this.store.dispatch(loadBoards());
-
-    this.http
-      .get('/assets/data.json')
-      .pipe(
-        map((data: any) => {
-          this.store.dispatch(loadBoardsSuccess({ boards: data.boards }));
-        }),
-        catchError((error) => {
-          this.store.dispatch(loadBoardsFailure({ error: error.message }));
-          return of(null);
-        })
-      )
-      .subscribe();
+  private generateIdsForBoard(board: any): Board {
+    return {
+      ...board,
+      id: uuidv4(),
+      columns: board.columns.map((column: any) => ({
+        ...column,
+        id: uuidv4(),
+        tasks: column.tasks.map((task: any) => ({
+          ...task,
+          id: uuidv4(),
+          subtasks: task.subtasks.map((subtask: any) => ({
+            ...subtask,
+            id: uuidv4(),
+          })),
+        })),
+      })),
+    };
   }
 
-  fetchBoardByName(boardName: string) {
-    this.http
-      .get<{ boards: any[] }>(this.url)
-      .pipe(
-        map((data) => {
-          const selectedBoard = data.boards.find(
-            (board) => board.name === boardName
-          );
-          if (selectedBoard) {
-            this.store.dispatch(loadBoardsSuccess({ boards: [selectedBoard] })); // Load only the selected board
-          } else {
-            this.store.dispatch(
-              loadBoardsFailure({ error: 'Board not found' })
-            );
-          }
-        }),
-        catchError((error) => {
-          this.store.dispatch(loadBoardsFailure({ error: error.message }));
-          return of(null);
-        })
-      )
-      .subscribe();
+  getBoards(): Observable<Board[]> {
+    return this.http
+      .get<{ boards: Board[] }>(this.dataUrl)
+      .pipe(map((response) => response.boards.map(this.generateIdsForBoard)));
   }
 }

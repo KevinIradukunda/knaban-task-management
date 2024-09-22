@@ -1,12 +1,9 @@
 import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import {
-  selectAllBoards,
-  selectLoading,
-} from '../../store/boards/board.selector';
+
 import { BoardService } from '../../services/boards/board.service';
-import { BoardState } from '../../model/boardstate.model';
+import { Board,Task } from '../../model/boardstate.model';
 import { TaskpopupService } from '../../services/taskpopup/taskpopup.service';
 import {
   selectIsPopupOpen,
@@ -16,6 +13,11 @@ import {
   closeTaskPopup,
   openTaskPopup,
 } from '../../store/taskpopup/taskpopup.action';
+import { AddtaskmodalService } from '../../services/addtaskmodal/addtaskmodal.service';
+import { TaskService } from '../../services/taskservice/task.service';
+import { selectActiveBoard, selectAllBoardsFromStore } from '../../store/boards/board.selector';
+import * as BoardActions from '../../store/boards/board.action';
+import { BoardState } from '../../store/boards/board.reducer';
 
 @Component({
   selector: 'app-boards',
@@ -23,48 +25,99 @@ import {
   styleUrl: './boards.component.css',
 })
 export class BoardsComponent {
-  boards$: Observable<any[]>;
-  loading$: Observable<boolean>;
-  error$: Observable<string | null>;
-  isTaskpopupOpen$: Observable<boolean>;
-  selectedTask$: Observable<any>;
+  isDarkMode$: Observable<boolean>;
+  boards$: Observable<Board[]>;
+  selectedBoard$: Observable<Board | null>;
+  activeBoard: Board | null = null; 
+
+  isModalOpen = false;
+  isBoardModalOpen = false; 
+  selectedTask: Task | null = null;
+  selectedColIndex: number = 0;
+  selectedTaskIndex: number = 0;
+  selectedBoardForEdit: Board | null = null;
 
   constructor(
-    private store: Store<BoardState>,
-    private boardService: BoardService
+    private store: Store<{
+      theme: { isDarkMode: boolean };
+      boards: BoardState;
+    }>
   ) {
-    this.boards$ = this.store.select(selectAllBoards);
-    this.loading$ = this.store.select(selectLoading);
-    this.error$ = this.store.select(selectError);
-
-    this.isTaskpopupOpen$ = this.store.select(selectIsPopupOpen);
-    this.selectedTask$ = this.store.select(selectSelectedTask);
+    this.isDarkMode$ = this.store.select((state) => state.theme.isDarkMode);
+    this.boards$ = this.store.select(selectAllBoardsFromStore);
+    this.selectedBoard$ = this.store.select(selectActiveBoard);
   }
 
   ngOnInit(): void {
-    this.boardService.fetchBoards();
-  }
+    this.store.dispatch(BoardActions.loadBoards());
 
-  openTask(task: any) {
-    this.store.dispatch(openTaskPopup({ task }));
-  }
+    
+    this.selectedBoard$.subscribe((board) => {
+      this.activeBoard = board;
+    });
 
-  closeModal() {
-    this.store.dispatch(closeTaskPopup());
-  }
-
-  addNewColumn() {
     this.boards$.subscribe((boards) => {
       if (boards.length > 0) {
-        const newColumn = {
-          name: 'New Column',
-          tasks: [],
-        };
-        boards[0].columns.push(newColumn);
+        this.store.dispatch(
+          BoardActions.setActiveBoard({ boardId: boards[0].id })
+        );
       }
     });
   }
-}
-function selectError(state: object): string | null {
-  throw new Error('Function not implemented.');
+
+  getCompletedSubtaskCount(task: Task): number {
+    return task.subtasks
+      ? task.subtasks.filter((subtask) => subtask.isCompleted).length
+      : 0;
+  }
+
+  getTotalSubtaskCount(task: Task): number {
+    return task.subtasks ? task.subtasks.length : 0;
+  }
+
+  openTaskModal(columnIndex: number, taskIndex: number, task: Task) {
+    this.selectedTask = task;
+    this.selectedColIndex = columnIndex;
+    this.selectedTaskIndex = taskIndex;
+    this.isModalOpen = true;
+  }
+
+  openBoardEditModal(board: Board | null) {
+    if (board) {
+      this.selectedBoardForEdit = board; 
+      this.isBoardModalOpen = true; 
+    }
+  }
+
+  closeModal() {
+    this.isModalOpen = false;
+    this.selectedTask = null;
+  }
+
+  closeBoardModal() {
+    this.isBoardModalOpen = false;
+    this.selectedBoardForEdit = null;
+  }
+
+  handleSubtaskToggled(
+    event: {
+      colIndex: number;
+      taskIndex: number;
+      subtaskIndex: number;
+      isCompleted: boolean;
+    },
+    task: Task
+  ): void {
+    const subtaskId = task.subtasks[event.subtaskIndex].id;
+
+    this.store.dispatch(
+      BoardActions.setSubtaskCompleted({
+        colIndex: event.colIndex,
+        taskIndex: event.taskIndex,
+        subtaskIndex: event.subtaskIndex,
+        isCompleted: event.isCompleted,
+        subtaskId: subtaskId,
+      })
+    );
+  }
 }

@@ -2,13 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-.dark-mode {
-    background-color: #20212C;
-    color: white;
-  }
-  
-  .light-mode {
-    background-color: white;
-    color: black;
-  }
-  
+body {
+  background-color: #e4ebfa;
+  font-family: "Plus Jakarta Sans", sans-serif;
+}

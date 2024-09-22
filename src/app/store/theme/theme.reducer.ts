@@ -1,31 +1,31 @@
-import { createReducer, on } from "@ngrx/store";
-import { themestate } from "../../model/theme.model";
-import { enableDarkMode, enableLightMode, putTheminlocalstorage } from "./theme.action";
+import { createReducer, on } from '@ngrx/store';
+import { ThemeActions } from './theme.action';
 
-function isLocalStorageAvailable(): boolean {
-  return typeof window !== 'undefined' && typeof localStorage !== 'undefined';
+export interface ThemeState {
+  isDarkMode: boolean;
 }
 
-export const initialstate: themestate = {
-  themeModeEnable: isLocalStorageAvailable() && localStorage.getItem('themeModeEnable') === 'true' || false,
+const initialState: ThemeState = {
+  isDarkMode: false,
 };
 
 export const themeReducer = createReducer(
-  initialstate,
-  on(enableDarkMode, (state) => {
-    if (isLocalStorageAvailable()) {
-      localStorage.setItem('darkModeEnabled', 'true');
-    }
-    return { ...state, themeModeEnable: true };
+  initialState,
+  on(ThemeActions.toggleTheme, (state) => {
+    const newIsDarkMode = !state.isDarkMode;
+
+    localStorage.setItem('isDarkMode', JSON.stringify(newIsDarkMode));
+    return {
+      ...state,
+      isDarkMode: newIsDarkMode,
+    };
   }),
-  on(enableLightMode, (state) => {
-    if (isLocalStorageAvailable()) {
-      localStorage.setItem('darkModeEnabled', 'false');
-    }
-    return { ...state, themeModeEnable: false };
+  on(ThemeActions.setInitialTheme, (state, { isDarkMode }) => {
+    return {
+      ...state,
+      isDarkMode,
+    };
   }),
-  on(putTheminlocalstorage, (state) => {
-    const isDarkMode = isLocalStorageAvailable() && localStorage.getItem('darkModeEnabled') === 'true';
-    return { ...state, themeModeEnable: isDarkMode };
-  })
+  on(ThemeActions.setDarkTheme, (state) => ({ ...state, isDarkMode: true })),
+  on(ThemeActions.setLightTheme, (state) => ({ ...state, isDarkMode: false }))
 );

@@ -1,27 +1,96 @@
-<div
-  *ngIf="boards$ | async as boards"
-  class="flex flex-col items-center mt-8 w-full cursor-pointer"
->
-  <div class="w-full px-6 overflow-auto h-[80vh]">
-    <div class="flex space-x-4 overflow-x-auto h-full">
-      <app-column
-        *ngFor="let column of boards[0]?.columns"
-        [column]="column"
-      ></app-column>
-      <div
-        class="new-column-card w-[300px] flex items-center justify-center bg-skyred p-4 rounded-lg shadow-md cursor-pointer"
+<div class="flex space-x-16 p-4 font-sans overflow-x-auto">
+  <div
+    *ngFor="
+      let column of (selectedBoard$ | async)?.columns;
+      let columnIndex = index
+    "
+    class="w-[250px] flex-shrink-0"
+  >
+    <span
+      [ngClass]="{
+        'bg-[#49C4E5]': column.name === 'Todo',
+        'bg-[#8471F2]': column.name === 'Doing',
+        'bg-[#67E2AE]': column.name === 'Done'
+      }"
+      class="w-3 h-3 rounded-full mr-4 bg-black"
+    >
+    </span>
+    <h3 class="text-lg font-semibold">
+      {{ column.name }} ({{ column.tasks.length }})
+    </h3>
+
+    <ul class="space-y-6 cursor-pointer">
+      <button
+        *ngFor="let task of column.tasks; let taskIndex = index"
+        class="rounded-lg shadow-md p-4"
+        [ngClass]="{
+          'bg-light-white text-gray-800': !(isDarkMode$ | async),
+          'bg-dark-tertiary text-light-primary': (isDarkMode$ | async)
+        }"
+        (click)="openTaskModal(columnIndex, taskIndex, task)"
       >
-        <button
-          (click)="addNewColumn()"
-          class="text-lg font-semibold text-MediumGray hover:text-MainPurple"
+        <p
+          class="text-sm font-semibold text-dark-tertiary hover:text-[#635FC7] w-[250px]"
+          [ngClass]="{
+            'text-dark-secondary': !(isDarkMode$ | async),
+            'text-light-white': (isDarkMode$ | async)
+          }"
         >
-          + New Column
-        </button>
-      </div>
-    </div>
+          {{ task.title }}
+        </p>
+        <p class="text-[14px] text-dark-text font-semibold">
+          {{ getCompletedSubtaskCount(task) }} of
+          {{ getTotalSubtaskCount(task) }} subtasks
+        </p>
+      </button>
+    </ul>
   </div>
-  <app-taskpopupcard
-    [selectedTask]="selectedTask$ | async"
-    [isPopupOpen$]="isTaskpopupOpen$"
-  ></app-taskpopupcard>
+
+  <div
+    class="w-[250px] h-[500px] rounded-lg flex justify-center items-center flex-shrink-0"
+    [ngClass]="{
+      'bg-[#E4EBFA] text-gray-800': !(isDarkMode$ | async),
+      'bg-dark-tertiary text-light-primary': (isDarkMode$ | async)
+    }"
+    (click)="openBoardEditModal(activeBoard)"
+  >
+    <ul class="space-y-6">
+      <div class="p-4 flex items-center space-x-2 cursor-pointer">
+        <p
+          class="text-lg font-bold text-dark-text hover:text-light-primary"
+          [ngClass]="{
+            'text-dark-secondary': !(isDarkMode$ | async),
+            'text-light-white hover:text-light-primary': (isDarkMode$ | async)
+          }"
+        >
+          +
+        </p>
+        <p
+          class="text-lg font-bold text-dark-text hover:text-light-primary"
+          [ngClass]="{
+            'text-dark-secondary': !(isDarkMode$ | async),
+            'text-light-white hover:text-light-primary': (isDarkMode$ | async)
+          }"
+        >
+          New Column
+        </p>
+      </div>
+    </ul>
+  </div>
 </div>
+
+<app-taskpopupcard
+  [colIndex]="selectedColIndex"
+  [taskIndex]="selectedTaskIndex"
+  [task]="selectedTask"
+  [activeBoard]="selectedBoard$ | async"
+  *ngIf="isModalOpen"
+  (closeModal)="closeModal()"
+  (subtaskToggled)="handleSubtaskToggled($event, selectedTask!)"
+></app-taskpopupcard>
+
+<app-addboardmodal
+  *ngIf="isBoardModalOpen"
+  [existingBoard]="selectedBoardForEdit"
+  (close)="closeBoardModal()"
+></app-addboardmodal>

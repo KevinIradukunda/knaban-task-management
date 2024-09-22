@@ -1,10 +1,16 @@
-import { Component, Input } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  HostListener,
+  Input,
+} from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { themestate } from './model/theme.model';
 import { isDarkModeEnabled } from './store/theme/theme.selector';
-import { enableDarkMode, enableLightMode } from './store/theme/theme.action';
+import { ThemeActions } from './store/theme/theme.action';
 import { isSidebarVisible } from './store/sidebar/sidebar.selector';
+import { Board } from './model/boardstate.model';
 
 @Component({
   selector: 'app-root',
@@ -14,25 +20,50 @@ import { isSidebarVisible } from './store/sidebar/sidebar.selector';
 export class AppComponent {
   title = 'knaban-taskmanagement';
 
-  isVisible$: Observable<boolean>;
+  isDarkMode$: Observable<boolean>;
+  isSidebarVisible: boolean = true;
+  selectedBoard: Board | null = null;
 
-  constructor(private store: Store) {
-    this.isVisible$ = this.store.select(isSidebarVisible);
+  constructor(
+    private store: Store<{ theme: { isDarkMode: boolean } }>,
+    private cdr: ChangeDetectorRef
+  ) {
+    this.isDarkMode$ = this.store.select((state) => state.theme.isDarkMode);
   }
 
-  // isDarkMode$: Observable<boolean>;
+  ngOnInit() {
+    const savedTheme = localStorage.getItem('isDarkMode');
+    const isDarkMode = savedTheme ? JSON.parse(savedTheme) : false;
 
-  // constructor(private store: Store<themestate>) {
-  //   this.isDarkMode$ = this.store.select(isDarkModeEnabled);
-  // }
+    this.store.dispatch(ThemeActions.setInitialTheme({ isDarkMode }));
 
-  // toggleTheme(isDarkMode: boolean) {
-  //   let target = event.target as HTMLInputElement;
-  //   const isChecked = target?.checked;
-  //   if (isDarkMode) {
-  //     this.store.dispatch(enableDarkMode());
-  //   } else {
-  //     this.store.dispatch(enableLightMode());
-  //   }
-  // }
+    this.isDarkMode$.subscribe((isDark) => {
+      localStorage.setItem('isDarkMode', JSON.stringify(isDark));
+
+      this.cdr.detectChanges();
+    });
+
+    this.updateSidebarVisibility(window.innerWidth);
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event: any) {
+    this.updateSidebarVisibility(event.target.innerWidth);
+  }
+
+  private updateSidebarVisibility(screenWidth: number) {
+    if (screenWidth < 768) {
+      this.isSidebarVisible = false;
+    } else {
+      this.isSidebarVisible = true;
+    }
+  }
+
+  toggleSidebar() {
+    this.isSidebarVisible = !this.isSidebarVisible;
+  }
+
+  onBoardSelected(board: Board): void {
+    this.selectedBoard = board;
+  }
 }

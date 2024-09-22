@@ -1,23 +1,25 @@
-export interface BoardState {
-  boards: any[];
-  loading: boolean;
-  error: string | null;
+export interface Subtask {
+  id: string;
+  title: string;
+  isCompleted: boolean;
 }
 
 export interface Task {
   id: string;
   title: string;
   description: string;
-  status: 'Todo' | 'Doing' | 'Done';
-  subtasks: Array<{ title: string; isCompleted: boolean }>;
+  status: string;
+  subtasks: Subtask[];
 }
 
 export interface Column {
-  name: 'Todo' | 'Doing' | 'Done';
+  id: string;
+  name: string;
   tasks: Task[];
 }
 
 export interface Board {
+  id: string;
   name: string;
   columns: Column[];
 }

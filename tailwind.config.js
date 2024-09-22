@@ -5,19 +5,38 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        jakarta: ['"Jakarta Sans"', "sans-serif"],
+        sans: ['"Plus Jakarta Sans"', "sans-serif"],
       },
       colors: {
-        MediumGray: "#828FA3",
-        MainPurple: "#635FC7",
-        MainHover: "#A8A4FF",
-        paleblue: "#F4F7FD",
-        bluesky: "#49C4E5",
-        skyred: "#EFEFF9",
-        bordercolors: "F3F3F3",
-        lightgrey: "F4F7FD",
+        dark: {
+          primary: "#635FC7",
+          secondary: "#2B2C37",
+          tertiary: "#3E3F4E",
+          background: "#000112",
+          text: "#828FA3",
+        },
+        light: {
+          primary: "#635FC7",
+          background: "#F4F7FD",
+          text: "#E4EBFA",
+          white: "#FFFFFF",
+        },
+        accent: {
+          danger: "#EA5555",
+          warning: "#FF9898",
+        },
       },
     },
   },
-  plugins: [],
+
+  plugins: [
+    function ({ addUtilities }) {
+      addUtilities({
+        ".no-scrollbar": {
+          overflow: "auto",
+          "&::-webkit-scrollbar": { display: "none" },
+        },
+      });
+    },
+  ],
 };

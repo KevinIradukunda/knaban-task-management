@@ -1,3 +1,3 @@
 export interface sidebarState {
-    visible:boolean;
+  visible: boolean;
 }
